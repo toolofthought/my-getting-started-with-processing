@@ -17,3 +17,9 @@
       rect(tileWidth * i, 0, tileWidth, height);
     }
   }
+  
+  void keyPressed() {
+      if (key == 's' || key == 'S') {
+          saveFrame("myRGBGradation.jpg");
+      }
+  }

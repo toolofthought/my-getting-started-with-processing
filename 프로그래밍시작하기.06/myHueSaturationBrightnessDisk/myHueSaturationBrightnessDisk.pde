@@ -36,8 +36,14 @@
     
     b += step;
   }
-    void mousePressed() {
-        saveFrame("myHueSaturationBrightnessDisk.jpg");
+    void keyPressed() {
+        if (key == 'b' || key == 'B') {
+          saveFrame("myHueSaturationBrightnessDiskBeginB.jpg");
+        }
+        if (key == 'e' || key == 'E') {
+           saveFrame("myHueSaturationBrightnessDiskBeginE.jpg");
+        }
+          
     }
   
    

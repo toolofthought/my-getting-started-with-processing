@@ -25,3 +25,9 @@
       rect((0.5 * width) + tileWidth * i, 0, tileWidth, height);
     }
   }
+  
+  void keyPressed() {
+      if (key == 's' || key == 'S') {
+          saveFrame("myHSBGradation.jpg");
+      }
+  }
