@@ -1,0 +1,28 @@
+import processing.pdf.*;
+boolean savePDF = false;
+
+void setup() {
+  size(480, 360);
+  noFill();
+}
+
+
+void draw() {
+  if (savePDF) {
+    beginRecord(PDF, "triangle_stroke.pdf");
+  }
+  
+  background(200);
+  stroke(50);
+  triangle(120, 120, 360, 120, 240, 240);
+
+  
+  if (savePDF) {
+    savePDF = false;
+    endRecord();
+  }
+}
+
+void keyReleased(){
+  if (key == 'p' || key == 'P') savePDF = true;
+}
