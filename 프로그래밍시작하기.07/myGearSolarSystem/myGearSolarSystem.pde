@@ -1,5 +1,4 @@
 //myGearSolarSystem
-
   PShape sun;
   PShape planet;
   PShape annulus;
@@ -30,7 +29,7 @@
 
     //planet01    
     pushMatrix();
-      translate(240 * cos(QUARTER_PI), 240 * sin(QUARTER_PI));
+      translate(240 * cos(PI / 6), 240 * sin(PI / 6));
       fill(#a1d99b);
       rotate(-theta * 16 / 32);
       shape(planet, 0, 0);
@@ -38,7 +37,7 @@
 
     //planet02    
     pushMatrix();
-      translate(240 * cos(PI * 3 / 4), 240 * sin(PI * 3 / 4));
+      translate(240 * cos(PI * 5 / 6), 240 * sin(PI * 5 / 6));
       fill(#a1d99b);
       rotate(-theta * 16 / 32);
       shape(planet, 0, 0);
@@ -46,7 +45,7 @@
 
     //planet03    
     pushMatrix();
-      translate(240 * cos(PI * 3 / 2), 240 * sin(PI * 3 / 2));
+      translate(240 * cos(PI * 9 / 6), 240 * sin(PI * 9 / 6));
       fill(#a1d99b);
       rotate(-theta * 16 / 32);
       shape(planet, 0, 0);
