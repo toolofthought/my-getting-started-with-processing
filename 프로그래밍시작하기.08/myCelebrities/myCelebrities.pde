@@ -36,6 +36,6 @@
   void getImages() {
     for (int i = 0; i < names.length; i++) {
       PImage img = loadImage(BASE_URL + names[i], "jpg");
-      img.save(names[i] + ".jpg");
+      img.save("data/" + names[i] + ".jpg");
     }
   }
