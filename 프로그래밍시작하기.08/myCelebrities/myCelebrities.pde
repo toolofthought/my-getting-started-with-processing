@@ -8,10 +8,10 @@
   File folder;
   
   void setup() {
-    //getImages();
+    getImages();
     folder = new File(dataPath(""));
     files = folder.listFiles();
-    size(600, 800);
+    size(600, 400);
     background(255);
     frameRate(1);
   }
@@ -36,6 +36,6 @@
   void getImages() {
     for (int i = 0; i < names.length; i++) {
       PImage img = loadImage(BASE_URL + names[i], "jpg");
-      img.save(dataPath("data") + names[i] + ".jpg");
+      img.save(names[i] + ".jpg");
     }
   }
