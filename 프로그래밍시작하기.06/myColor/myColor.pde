@@ -1,5 +1,5 @@
 //myColor
-  color[] myColor = new color[]{#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506};
+  color[] myColor = new color[]{#ffffe5, #fff7bc, #fee391, #fec44f, #fe9929, #ec7014, #cc4c02, #993404, #662506, #000000};
 
   void setup() {
       size(480, 360);
