@@ -22,7 +22,7 @@ void setup() {
     imageURLs.add(imageURL);
     println(imageURL);
     PImage image = loadImage(imageURL);
-    image.save(imageURL.substring(46, 57));
+    image.save("data/"+ imageURL.substring(46, 57));
     
   }
 }
