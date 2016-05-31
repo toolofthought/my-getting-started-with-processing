@@ -11,7 +11,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 String URL = "http://www.kobis.or.kr/kobis/business/stat/boxs/findDailyBoxOfficeList.do";
-String DATE = "2016-05-26";
+String DATE = "2016-05-30";
 
 Elements table;
 
@@ -66,6 +66,6 @@ Elements getTable() {
   Document doc = Jsoup.parse(driver.getPageSource());
 
   Elements table = doc.select("#tbody_0");
-  
+  driver.quit();
   return table;
 }
