@@ -1,3 +1,7 @@
+//calendar
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 //myGetMovieTitleAndRevenue
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,14 +15,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 String URL = "http://www.kobis.or.kr/kobis/business/stat/boxs/findDailyBoxOfficeList.do";
-String DATE = "2016-05-30";
-
+//String DATE = "2016-05-30";
+Date now;
+SimpleDateFormat sdf;
 Elements table;
 
 ArrayList<String> titles = new ArrayList<String>();
 ArrayList<String> revenues = new ArrayList<String>();
 
 void setup() {
+  now = new Date();
+  sdf = new SimpleDateFormat("yyyy-MM-dd");
+  
   table = getTable();
   getMovieTitle();
   getMovieRevenue();
@@ -50,7 +58,7 @@ Elements getTable() {
   //date input 
   WebElement inputDate = driver.findElement(By.xpath("//input[@id='sSearchTo']"));
   for (int i = 0; i< 10; i++) inputDate.sendKeys(Keys.BACK_SPACE);
-  inputDate.sendKeys((DATE));
+  inputDate.sendKeys(sdf.format(now));
   
   //click search button
   WebElement searchButton = driver.findElement(By.xpath("//a[@onclick=\"chkform('search'); return false;\"]"));
