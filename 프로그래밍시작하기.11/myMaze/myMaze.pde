@@ -4,14 +4,15 @@ int posX;
 int posY;
 
 void setup() {
-  size(324, 324);
+  size(648, 648);
   posX = width / 2;
   posY = height / 2;
+  scale(2);
   maze = loadImage("20 cells diameter theta maze.png");
 }
 
 void draw() {
-  image(maze, 0, 0);
+  image(maze, 0, 0, width, height);
   fill(255, 0, 0);
   ellipse(posX, posY, 15, 15);
 

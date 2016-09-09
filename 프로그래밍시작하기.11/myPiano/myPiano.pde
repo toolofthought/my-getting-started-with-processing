@@ -31,7 +31,7 @@ void keyPressed() {
     d.trigger();
   }
   else if (key == 'e' || key == 'E') {
-    e.trigger();
+
   }
   else if (key == 'f' || key == 'F') {
     f.trigger();

@@ -4,7 +4,7 @@ void draw() {
 }
 
 void keyPressed() {
-  if (key == 'a') {
+  if (key == 'g') {
     count++;
     println(count + " bananas");
   }
