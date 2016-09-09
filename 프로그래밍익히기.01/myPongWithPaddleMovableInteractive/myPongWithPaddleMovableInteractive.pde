@@ -1,6 +1,6 @@
-  //myPongWithBlock
+//myPongWithPaddleMovableInteractive
   
-  class Block {
+  class Paddle {
     
     int x;
     int y;
@@ -9,7 +9,7 @@
     char up;
     char down;
         
-    Block(int x_, int y_, int w_, int h_, char up_, char down_) {
+    Paddle(int x_, int y_, int w_, int h_, char up_, char down_) {
       x = x_;
       y = y_;
       w = w_;
@@ -80,28 +80,60 @@
           println("acceleration:" + acceleration.x + ", " + acceleration.y);
       }
       
+      boolean isColliding(Paddle b) {
+            //borders
+            float left = b.x - radius;
+            float right = b.x + b.w + radius;
+            float top = b.y - radius;
+            float bottom = b.y  + b.h + radius;
+            if ((location.x > left) && (location.x < right) && (location.y > top) && (location.y < bottom)){
+              return true;
+            }
+            else {
+              return false;
+            }
+      }
+      
       
   }
   
   Ball ball;
-  Block left;
-  Block right;
+  Paddle left;
+  Paddle right;
   
   void setup() {
       size(480, 360);
       smooth();
       background(255);
       ball = new Ball();
-      left = new Block(10, 120, 20, 120, 'q', 'a');
-      right = new Block(width - 10 - 20, 120, 20, 120, 'p', 'l');
+      left = new Paddle(10, 120, 20, 120, 'q', 'a');
+      right = new Paddle(width - 10 - 20, 120, 20, 120, 'p', 'l');
   }
   
   void draw() {
       background(255);
+      noFill();
       ball.move();
-      ball.display();
-      left.display();
-      right.display();
+      if (ball.isColliding(left)) {
+        fill(100);
+        left.display();
+        ball.display();
+        noFill();
+        right.display();
+      }
+      else if (ball.isColliding(right)) {
+        fill(100);
+        right.display();
+        ball.display();
+        noFill();
+        left.display();
+      }
+      else {
+        left.display();
+        right.display();
+        ball.display();
+      }
+     
   }
   
   void keyPressed() {
