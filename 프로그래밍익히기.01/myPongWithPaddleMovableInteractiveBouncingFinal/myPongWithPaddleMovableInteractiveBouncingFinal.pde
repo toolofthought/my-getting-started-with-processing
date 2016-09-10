@@ -44,16 +44,10 @@
   
       Ball() {
           location = new PVector(width / 2, height / 2);
-          velocity = new PVector(0, 0);
+          velocity = new PVector(random(1) > 0.5 ? 5 : -5, 0);
           acceleration = new PVector(0, 0);
       }
       
-      Ball(int velocity_x) {
-          location = new PVector(width / 2, height / 2);
-          velocity = new PVector(velocity_x, 0);
-          acceleration = new PVector(0, 0);
-      }
-  
       //공의 속도와 위치를 업데이트 합니다
       void move() {
           velocity.add(acceleration);
@@ -91,8 +85,7 @@
       //paddle과 상호작용합니다
       void interactWith(Paddle p) {
         if (isColliding(p)) {
-  
-          velocity.x *= -1.03;
+          velocity.x *= -1;
         }
       }
   
@@ -126,7 +119,7 @@
       size(480, 360);
       smooth();
       background(255);
-      ball = new Ball(random(1) > 0.5 ? 5 : -5);
+      ball = new Ball();
       left = new Paddle(10, 120, 20, 120, 'q', 'a');
       right = new Paddle(width - 10 - 20, 120, 20, 120, 'p', 'l');
   }
