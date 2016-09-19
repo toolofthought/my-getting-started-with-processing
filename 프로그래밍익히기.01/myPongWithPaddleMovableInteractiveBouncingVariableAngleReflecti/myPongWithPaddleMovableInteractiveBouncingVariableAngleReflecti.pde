@@ -1,4 +1,4 @@
-//myPongWithPaddleMovableInteractiveBouncingVariableAngleAcceleration
+//myPongWithPaddleMovableInteractiveBouncingVariableAngleReflection
         
     class Paddle {
         
@@ -32,6 +32,7 @@
         
         void display() {
             rect(x, y, w, h);
+            line(x, y + h / 2, x + w, y + h / 2);
         }
     }
         
@@ -84,12 +85,19 @@
         
         //paddle과 상호작용합니다
         void interactWith(Paddle p) {
-            if (isColliding(p)) { 
+            if (isColliding(p)) {
+                float factor = abs(location.y - (p.y + p.h / 2));
+                float reflect = map(factor,0, p.h / 2, 0, radians(75));
+                println("reflect: " + reflect);
                 velocity.x *= -1.0;
-                velocity.y 
-                 
-                velocity.mult(1.0);
-                println(degrees(velocity.heading()));
+                if (velocity.y < 0) {
+                  velocity.y = velocity.mag() * sin(-reflect);
+                }
+                else {
+                  velocity.y = velocity.mag() * sin(reflect);
+                }
+                
+                velocity.mult(1.03);
             }
         }
 
@@ -100,12 +108,12 @@
         }
         
         //공과 패들이 충돌하는지를 알려줍니다
-        boolean isColliding(Paddle b) {
+        boolean isColliding(Paddle p) {
             //borders
-            float left = b.x - radius;
-            float right = b.x + b.w + radius;
-            float top = b.y - radius;
-            float bottom = b.y  + b.h + radius;
+            float left = p.x - radius;
+            float right = p.x + p.w + radius;
+            float top = p.y - radius;
+            float bottom = p.y  + p.h + radius;
             if ((location.x > left) && (location.x < right) && (location.y > top) && (location.y < bottom)){
                 return true;
             }
