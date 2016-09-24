@@ -89,7 +89,18 @@
                 float factor = abs(location.y - (p.y + p.h / 2));
                 float reflect = map(factor,0, p.h / 2, 0, radians(75));
                 println("reflect: " + reflect);
+                //경계면 처리
+                if (velocity.x < 0) {
+                  location.x = p.x + p.w + radius;
+                }
+                else {
+                  location.x = p.x - radius;
+                }
+                
+                //방형 역전
                 velocity.x *= -1.0;
+                
+                //반사
                 if (velocity.y < 0) {
                   velocity.y = velocity.mag() * sin(-reflect);
                 }
@@ -97,6 +108,7 @@
                   velocity.y = velocity.mag() * sin(reflect);
                 }
                 
+                //가속
                 velocity.mult(1.03);
             }
         }
