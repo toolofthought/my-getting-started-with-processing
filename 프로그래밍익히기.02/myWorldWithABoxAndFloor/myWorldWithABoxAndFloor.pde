@@ -113,10 +113,11 @@
     translate(floorPosition.x, floorPosition.y);
     rect(0, 0, wFloor, hFloor);
     popMatrix();
+    //saveFrame("frames/myWorldWithABoxAndFloor########.png");
   }
   
   void keyPressed() {
     if (key == 's' || key == 'S') {
-         saveFrame("myWorldWithABoxAndFloor####.jpg");
+         saveFrame("myWorldWithABoxAndFloor####.png");
     }
   }
