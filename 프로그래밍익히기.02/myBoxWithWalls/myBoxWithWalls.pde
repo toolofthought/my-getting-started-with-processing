@@ -14,6 +14,8 @@
   ArrayList<Box> boxes;
   Floor floor;
   Floor inAir;
+  Floor left;
+  Floor right;
 
   void setup() {
     size(480, 360);
@@ -23,7 +25,9 @@
     box2d.setGravity(0, -9.8);
     boxes = new ArrayList<Box>();
     floor = new Floor(width / 2, height - 16 / 2, width, 16);
-    inAir = new Floor(width / 2, height / 2 - 16 / 2, width / 2, 16); 
+    inAir = new Floor(width / 2, height / 2 - 16 / 2, width / 2, 16);
+    left = new Floor(0 + 16 / 2, height * 3 / 4, 16, height / 2 - 16 * 2);
+    right = new Floor(width - 16 / 2, height * 3 / 4, 16, height / 2 - 16 * 2);
   }
 
   void draw() {
@@ -39,6 +43,8 @@
     
       floor.display();
       inAir.display();
+      left.display();
+      right.display();
     }
   
   class Box {
@@ -175,7 +181,7 @@
   
   void keyPressed() {
     if(key == 's' || key == 'S') {
-      saveFrame("myBox######.jpg");
+      saveFrame("myBoxWithWalls######.jpg");
     }
   }
  
