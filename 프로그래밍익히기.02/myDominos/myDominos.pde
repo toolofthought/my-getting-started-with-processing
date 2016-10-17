@@ -1,4 +1,4 @@
-  //myBoxWithWalls
+  //myDominos
 
   //myBoxClass: importing necessary classes
   //Box2DProcessing class
@@ -7,11 +7,11 @@
   import org.jbox2d.dynamics.*;
   //Vec2 class
   import org.jbox2d.common.*;
-  //PolygonShape class
+  //PolygonShape, CircleShape classes
   import org.jbox2d.collision.shapes.*;
   
   Box2DProcessing box2d;
-  ArrayList<Box> boxes;
+  ArrayList<Ball> balls;
   Floor floor;
   Floor inAir;
   Floor left;
@@ -20,10 +20,11 @@
   void setup() {
     size(480, 360);
     background(255);
+    balls = new ArrayList<Ball>();
+    
     box2d = new Box2DProcessing(this);
     box2d.createWorld();
     box2d.setGravity(0, -9.8);
-    boxes = new ArrayList<Box>();
     floor = new Floor(width / 2, height - 16 / 2, width, 16);
     inAir = new Floor(width / 2, height / 2 - 16 / 2, width / 2, 16);
     left = new Floor(0 + 16 / 2, height * 3 / 4, 16, height / 2 - 16 * 2);
@@ -34,10 +35,10 @@
     background(255);
     box2d.step();
     if(mousePressed) {
-      boxes.add(new Box(mouseX, mouseY));
+      balls.add(new Ball(mouseX, mouseY));
     }
     
-    for(Box b: boxes) {
+    for(Ball b: balls) {
       b.display();
     }
     
@@ -47,22 +48,19 @@
     right.display();
   }
   
-  class Box {
+  class Ball {
 
     //Box2D에서 사용할 body
     Body body;
     //픽셀 단위 너비와 높이
-    float w;
-    float h;
-
+    float r;
     //Constructor
     //픽셀단위로 위치를 받아 body를 배치함
     //Box2D를 다룰 때 필요한 복잡한 설정을
     //wrapping하고 있음
-    Box(float x, float y) {
+    Ball(float x, float y) {
       //객체가 생성될 때 너비와 높이를 정함
-      w = random(4, 16);
-      h = random(4, 16);
+      r = 20;
       
       //body 정의하기
       ////BodyDef 정의하기
@@ -74,7 +72,7 @@
       body =  box2d.createBody(bd);
       
       ////polygon 정의하기
-      PolygonShape ps = new PolygonShape();
+      CircleShape cs = new CircleShape();
       float box2dW = box2d.scalarPixelsToWorld(w/2);
       float box2dH = box2d.scalarPixelsToWorld(h/2);
       //////Box2D는 중심에서 경계까지의 길이를 너비와 높이로 삼습니다
