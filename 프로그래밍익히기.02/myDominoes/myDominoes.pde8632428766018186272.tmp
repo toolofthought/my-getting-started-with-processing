@@ -22,9 +22,8 @@
     box2d.setGravity(0, -9.8);
     dominoes = new ArrayList<Domino>();
     for (int i = 0; i < 11; i++) {
-      for (int j = 1; j <= 1; j++) {
-        dominoes.add(new Domino(40 + 40 * i, height - 16  - 40 * j, 10, 40));
-        dominoes.add(new Domino(45 + 40 * i, height - 16 - (40 + 10) * j, 40, 10));
+      for (int j = 1; j < 5; j++) {
+        dominoes.add(new Domino(40 + 40 * i, height - 16  - 39 * j, 10, 40));
       }
     }
     balls = new ArrayList<Ball>();
@@ -239,7 +238,7 @@
   
   void keyPressed() {
     if(key == 's' || key == 'S') {
-      saveFrame("myDominoes######.jpg");
+      saveFrame("myBoxWithWalls######.jpg");
     }
   }
   

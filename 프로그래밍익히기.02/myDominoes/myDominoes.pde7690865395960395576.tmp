@@ -22,10 +22,7 @@
     box2d.setGravity(0, -9.8);
     dominoes = new ArrayList<Domino>();
     for (int i = 0; i < 11; i++) {
-      for (int j = 1; j <= 1; j++) {
-        dominoes.add(new Domino(40 + 40 * i, height - 16  - 40 * j, 10, 40));
-        dominoes.add(new Domino(45 + 40 * i, height - 16 - (40 + 10) * j, 40, 10));
-      }
+      dominoes.add(new Domino(40 + 40 * i, 0, 10, 40));
     }
     balls = new ArrayList<Ball>();
     floor = new Floor(0, height - 16, width, 16);
@@ -71,7 +68,9 @@
       //고정된 물체입니다
       bd.type = BodyType.DYNAMIC;
       //(x, y)좌표에 body위치 시키기
-      bd.position.set(box2d.coordPixelsToWorld(x_ + w / 2, y_ + h / 2));
+      float box2dW = box2d.scalarPixelsToWorld(w/2);
+      float box2dH = box2d.scalarPixelsToWorld(h/2);
+      bd.position.set(box2d.coordPixelsToWorld(x_ + box2dW, y_ + box2dH));
       //bd정의에 따라 body 인스턴스 생성하기
       body =  box2d.createBody(bd);
         
@@ -80,8 +79,6 @@
       
       //Box2D는 중심에서 경계까지의 길이를 너비와 높이로 삼습니다
       //프로세싱의 rectMode(RADIUS)가 Box2D에서는 기본설정입니다
-      float box2dW = box2d.scalarPixelsToWorld(w/2);
-      float box2dH = box2d.scalarPixelsToWorld(h/2);
       ps.setAsBox(box2dW, box2dH);
   
       //fixture정의, 그리고 fixture와 body 연결하기
@@ -239,7 +236,7 @@
   
   void keyPressed() {
     if(key == 's' || key == 'S') {
-      saveFrame("myDominoes######.jpg");
+      saveFrame("myBoxWithWalls######.jpg");
     }
   }
   
