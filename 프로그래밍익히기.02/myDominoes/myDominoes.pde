@@ -21,11 +21,14 @@
     box2d.createWorld();
     box2d.setGravity(0, -9.8);
     dominoes = new ArrayList<Domino>();
-    for (int i = 0; i < 11; i++) {
-      for (int j = 1; j <= 1; j++) {
-        dominoes.add(new Domino(40 + 40 * i, height - 16  - 40 * j, 10, 40));
-        dominoes.add(new Domino(45 + 40 * i, height - 16 - (40 + 10) * j, 40, 10));
+    
+        
+    for (int i = 0; i < 10; i++) {
+      dominoes.add(new Domino(40 + 40 * i, height - 16  - 40, 10, 40));
+      if (i == 10 - 1) {
+        break;
       }
+      dominoes.add(new Domino(45 + 40 * i, height - 16  - 40 - 10, 40, 10));  
     }
     balls = new ArrayList<Ball>();
     floor = new Floor(0, height - 16, width, 16);
