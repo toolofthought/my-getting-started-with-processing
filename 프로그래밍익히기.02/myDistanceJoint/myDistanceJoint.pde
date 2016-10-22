@@ -26,10 +26,9 @@
     box2d.createWorld();
     box2d.setGravity(0, -9.8);
     
-    float len = height / 2;
     origin = new Box(width / 2, height / 4, 40, 40, 1, false);
-    left = new Box(width / 2 + len * cos(radians(30)), height * 1 / 4, 40, 40, 1,  true);
-    right = new Box(width / 2 - len * cos(radians(30)), height * 1 / 4, 40, 40, 10, true);
+    left = new Box(width / 2, height * 2 / 4, 40, 40, 10,  true);
+    right = new Box(width * 3 / 4, height * 2 / 4, 40, 40, 1, true);
     
     first = new Rod(origin, left);
     second = new Rod(left, right);
@@ -45,7 +44,7 @@
     left.display();
     right.display();
     
-    saveFrame("frames/myDistanceJoint######.png");
+    //saveFrame("frames/myDistanceJoint######.png");
     
 
   }
@@ -107,7 +106,7 @@
         djd.bodyB = right.body;
         djd.dampingRatio = 1;
         djd.frequencyHz = 0;
-        djd.dampingRatio = 1;
+   
         
         Vec2 aLocation = a.body.getTransform().p;
         Vec2 bLocation = b.body.getTransform().p;
