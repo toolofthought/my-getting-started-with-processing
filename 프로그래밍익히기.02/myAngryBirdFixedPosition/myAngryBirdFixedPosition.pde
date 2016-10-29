@@ -1,4 +1,4 @@
-  //myAngryBird
+  //myAngryBirdFixedPosition
   
   import shiffman.box2d.*;
   import org.jbox2d.dynamics.*;
@@ -31,6 +31,9 @@
     floor = new Box(0, height - 20, width, height, false);
     
     birds = new ArrayList<Bird>();
+    
+    clickX = width / 4;
+    clickY = height / 2;
 
   }
 
@@ -149,15 +152,11 @@
      
   void keyPressed() {
     if(key == 's' || key == 'S') {
-      saveFrame("myAngryBird######.png");
+      saveFrame("myAngryBirdFixedPosition######.png");
     }
   }
   
-  void mousePressed() {
-    clickX = mouseX;
-    clickY = mouseY;
-    
-  }
+
   
   void mouseReleased() {
     birds.add(new Bird(clickX, clickY, clickX - mouseX, mouseY - clickY));
