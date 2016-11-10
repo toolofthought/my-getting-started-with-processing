@@ -1,177 +1,134 @@
-import shiffman.box2d.*;
-import org.jbox2d.dynamics.*;
-import org.jbox2d.common.*;
-import org.jbox2d.collision.shapes.*;
+//myForceField
 
-Box2DProcessing box2d;
-Box floor;
-Box floor2;
-Box move;
-ArrayList<Bird> birds;
+class Vehicle {
+  PVector location;
+  PVector velocity;
+  PVector acceleration;
+  float len;
+  float maxSpeed;
+  float maxForce;
+  ArrayList<PVector> trails = new ArrayList<PVector>();
 
-int clickX;
-int clickY;
-int offsetX;
-int offsetY;
+  Vehicle() {
+    this(width / 2, height / 2);
+  }
 
+  Vehicle(float x, float y) {
+    location = new PVector(x, y);
+    velocity = new PVector(3.0, 4.0);
+    len = 20;
+    maxSpeed = 1.0;
+    maxForce = 1.0;
+  }
+
+  void move(PVector target) {
+    PVector desired = PVector.sub(target, location);
+    desired.normalize();
+    desired.mult(5);
+    desired.limit(maxSpeed);
+
+    PVector steer = PVector.sub(desired, velocity);
+    steer.limit(maxForce);
+
+    velocity.add(steer);
+    location.add(velocity);
+    
+    trails.add(location.copy());
+    if (trails.size() > 200) {
+      trails.remove(0);
+    }
+
+    if (location.x > width) {
+      location.x = 0;
+    }
+    if (location.x < 0) {
+      location.x = width;
+    }
+    if (location.y > height) {
+      location.y = 0;
+    }
+    if (location.y < 0) {
+      location.y = height;
+    }
+  }
+
+  void display() {
+    strokeWeight(0.5);
+    smooth();
+    stroke(100);
+    beginShape();
+    for (PVector t : trails) {
+      vertex(t.x, t.y);
+    }
+    endShape();
+    
+    pushMatrix();
+    translate(location.x, location.y);
+    rotate(velocity.heading());
+    beginShape();
+    vertex(len, 0);
+    vertex(len / -2, len / -2 * sqrt(3));
+    vertex(-len / 2, len / 2 * sqrt(3));
+    endShape(CLOSE);
+    popMatrix();
+  }
+}
+class ForceField {
+  PVector [][] field;
+  int nX;
+  int nY;
+  int resolution;
+
+  ForceField(int r) {
+    resolution = r;
+    nX = width / r;
+    nY = height / r;
+    field = new PVector[nY][nX];
+    for (int y = 0; y < nY; y++) {
+      for (int x = 0; x < nX; x++) {
+        field[y][x] = PVector.random2D();
+      }
+    }
+  }
+
+  void displayForce(PVector p, float scale) {
+    pushMatrix();
+    translate(p.x, p.y);
+    rotate(p.heading());
+    line(0, 0, scale, 0);
+    popMatrix();
+  }
+
+  void display() {
+    for (int y = 0; y < nY; y++) {
+      for (int x = 0; x < nX; x++) {
+        displayForce(field[y][x], width / resolution);
+      }
+    }
+  }
+
+}
+Vehicle vehicle;
+ForceField forcefield;
 
 void setup() {
-    size(1600, 600);
-    background(255);
-
-    box2d = new Box2DProcessing(this);
-    box2d.createWorld();
-    box2d.setGravity(0, -9.8);
-
-    floor = new Box(0, height - 20, width-1000, height, false, false);
-    floor2 = new Box(width-1000, height - 20, width, height, false, true);
-    move= new Box(50,height-50,70,height-30,true,false);
-    clickX = width / 4;
-    clickY = height / 2;
-    birds = new ArrayList<Bird>();
-    birds.add(new Bird(0, 0));
-
+  size(480, 360);
+  background(255);
+  vehicle = new Vehicle(random(0, width), random(0, height));
+  forcefield = new ForceField(10);
 }
 
 void draw() {
-    background(255);
-
-    for (Bird bird : birds) {
-        bird.display();
-    box2d.step();
-    floor.display(false);
-    floor2.display(true);
-    move.display(false);
-    if (mousePressed) {
-        line(clickX, clickY, mouseX, mouseY);
-    }
-    }
-
+  background(255);
+  forcefield.display();
+  PVector mouse = new PVector(mouseX, mouseY);
+  vehicle.move(mouse);
+  vehicle.display();
+  
 }
-
-class Box {
-    Body body;
-    float w;
-    float h;
-
-    Box(float x1, float y1, float x2, float y2, boolean isDynamic,boolean isSlow) {
-
-        w = abs(x1 - x2);
-        h = abs(y1 - y2);
-
-        BodyDef bd = new BodyDef();
-        if (isDynamic) {
-            bd.type = BodyType.DYNAMIC;
-        }
-        else {
-            bd.type = BodyType.STATIC;
-        }
-        //body의 중심
-        bd.position.set(box2d.coordPixelsToWorld((x1 + x2) / 2, (y1 + y2) / 2));
-        body = box2d.createBody(bd);
-
-        PolygonShape ps = new PolygonShape();
-        float box2dW = box2d.scalarPixelsToWorld(w / 2);
-        float box2dH = box2d.scalarPixelsToWorld(h / 2);
-        ps.setAsBox(box2dW, box2dH);
-
-        FixtureDef fd = new FixtureDef();
-        fd.shape = ps;
-        
-        if (isSlow) {
-            fd.density = 1;
-            fd.friction=20;
-            fd.restitution = 0.3;
-        }
-        else {
-            fd.density = 1;
-            fd.friction=0.3;
-            fd.restitution = 0.3;
-        }
-        
- 
-        body.createFixture(fd);
-        
-    }
-
-    void display(boolean isSlow) {
-        Vec2 pos = box2d.getBodyPixelCoord(body);
-        float a = body.getAngle();
-        pushMatrix();
-            translate(pos.x,pos.y);
-            rotate(-a);
-            if(isSlow){
-              fill(70);
-            }
-            else {
-              fill(175);
-            }
-            stroke(0);
-            rectMode(CENTER);
-            rect(0,0,w,h);
-        popMatrix();
-    }
-}
-
-class Bird {
-    Body body;
-    float r = 20;
-
-    Bird(float x, float y) {
-        this(x, y, 0, 0);
-    }
-
-    Bird(float x, float y, float velocityX, float velocityY) {
-        BodyDef bd =  new BodyDef();
-        bd.type = BodyType.DYNAMIC;
-        bd.position.set(box2d.coordPixelsToWorld(x, y));
-        body = box2d.createBody(bd);
-        float box2dVelocityX = box2d.scalarPixelsToWorld(velocityX);
-        float box2dVelocityY = box2d.scalarPixelsToWorld(velocityY);
-
-        body.setLinearVelocity(new Vec2(box2dVelocityX, box2dVelocityY));
-
-        CircleShape cs = new CircleShape();
-        float box2dRadius = box2d.scalarPixelsToWorld(r);
-        cs.m_radius = box2dRadius;
-        FixtureDef fd = new FixtureDef();
-        fd.shape = cs;
-        fd.density = 5;
-        fd.friction = 0.3;
-        fd.restitution = 0.9;
-        body.createFixture(fd);
-
-        println(box2dVelocityX, box2dVelocityY);
-
-
-    }
-
-    void display() {
-        Vec2 pos = box2d.getBodyPixelCoord(body);
-        pushMatrix();
-            translate(pos.x,pos.y);
-            fill(200, 153, 153);
-            stroke(0);
-            ellipseMode(RADIUS);
-            ellipse(0,0,r,r);
-        popMatrix();
-    }
-}
-
-
 
 void keyPressed() {
-    if(key == 's' || key == 'S') {
-        saveFrame("myAngryBird######.png");
-    }
-}
-
-void mousePressed() {
-    clickX = mouseX;
-    clickY = mouseY;
-
-}
-
-void mouseReleased() {
-    birds.add(new Bird(clickX, clickY, clickX - mouseX, mouseY - clickY));
+  if (key == 's' || key == 'S') {
+    saveFrame("myVehicleWithTrail######.png");
+  }
 }

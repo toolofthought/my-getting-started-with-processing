@@ -1,4 +1,4 @@
-//myVehiclesToMouse
+//myVehicleWithTrail
 
 class Vehicle {
   PVector location;
@@ -7,6 +7,7 @@ class Vehicle {
   float len;
   float maxSpeed;
   float maxForce;
+  ArrayList<PVector> trails = new ArrayList<PVector>();
 
   Vehicle() {
     this(width / 2, height / 2);
@@ -32,6 +33,10 @@ class Vehicle {
     velocity.add(steer);
     location.add(velocity);
     
+    trails.add(location.copy());
+    if (trails.size() > 200) {
+      trails.remove(0);
+    }
 
     if (location.x > width) {
       location.x = 0;
@@ -48,6 +53,15 @@ class Vehicle {
   }
 
   void display() {
+    strokeWeight(0.5);
+    smooth();
+    stroke(100);
+    beginShape();
+    for (PVector t : trails) {
+      vertex(t.x, t.y);
+    }
+    endShape();
+    
     pushMatrix();
     translate(location.x, location.y);
     rotate(velocity.heading());
@@ -60,28 +74,23 @@ class Vehicle {
   }
 }
 
-ArrayList<Vehicle> vehicles;
+Vehicle vehicle;
 
 void setup() {
   size(480, 360);
   background(255);
-  vehicles = new ArrayList<Vehicle>();
-  for (int i = 0; i < 20; i++) {
-    vehicles.add(new Vehicle(random(0, width), random(0, height)));
-  }
+  vehicle = new Vehicle(random(0, width), random(0, height));
 }
 
 void draw() {
   background(255);
   PVector mouse = new PVector(mouseX, mouseY);
-  for (int i = 0; i < vehicles.size(); i++) {
-    vehicles.get(i).move(mouse);
-    vehicles.get(i).display();
-  }
+  vehicle.move(mouse);
+  vehicle.display();
 }
 
 void keyPressed() {
   if (key == 's' || key == 'S') {
-    saveFrame("myVehiclesToMouse######.png");
+    saveFrame("myVehicleWithTrail######.png");
   }
 }
