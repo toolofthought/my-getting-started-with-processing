@@ -18,7 +18,7 @@
       line = createShape(PShape.PATH);
       line.beginShape();
       for (int x = 5; x < width; x += width / nX) {
-        frequency = map(x, 0, width, 1, width);
+        frequency = map(x, 0, width, 1, 10);
         amplitude = map(y, 0, height, 1, 30);
         
         line.vertex(x, y + sin(frequency) * amplitude);
