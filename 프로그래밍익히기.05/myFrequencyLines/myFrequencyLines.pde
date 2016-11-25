@@ -2,24 +2,26 @@
 
   PShape lines;
   PShape line;
+  float frequency;
   float amplitude;
-  int nY = 10;
-  int nX = 50;
+  int nY = 8;
+  int nX = 600;
 
   void setup() {
     size(800, 600);
     background(255);
     smooth();
 
+    amplitude = 30;
     lines = createShape(GROUP);
     for (int y = 5; y < height; y += height / nY) {
 
       line = createShape(PShape.PATH);
       line.beginShape();
-      amplitude = map(y, 0, height, 0, 30);
+      frequency = map(y, 0, height, 1, 10);
       for (int x = 5; x < width; x += width / nX) {
         
-        line.vertex(x, y + sin(radians(x)) * amplitude);
+        line.vertex(x, y + sin(radians(x) * frequency) * amplitude);
       }
       line.endShape();
 
@@ -30,13 +32,11 @@
   }
   
   void draw() {
-
-
   }
 
   void keyPressed()
   {
     if (key == 's' || key == 'S') {
-      saveFrame("myAmplitudeLines####.png");
+      saveFrame("myFrequencyLines####.png");
     }
   }
