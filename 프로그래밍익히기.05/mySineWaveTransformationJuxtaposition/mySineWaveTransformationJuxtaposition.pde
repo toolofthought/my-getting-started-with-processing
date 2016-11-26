@@ -1,4 +1,4 @@
-//mySineWaveTransformationCustomized
+//mySineWaveTransformationJuxtaposition
 
 PImage source;
 PShape target;
