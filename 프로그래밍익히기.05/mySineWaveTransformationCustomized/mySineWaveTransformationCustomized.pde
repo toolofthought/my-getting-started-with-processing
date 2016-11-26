@@ -4,7 +4,7 @@ PImage source;
 PShape target;
 
 int stepX = 3;
-int stepY = 20;
+int stepY = 10;
 int myBrightness;
 int inverseMyBrightness;
 float frequency;
