@@ -48,8 +48,8 @@ void draw() {
 			target.addChild(line);
 		}
 
-		shape(target, 0, 0);
-		image(original, cam.width, 0);
+		shape(target, cam.width, 0);
+		image(original, 0, 0);
 	}
 }
 
