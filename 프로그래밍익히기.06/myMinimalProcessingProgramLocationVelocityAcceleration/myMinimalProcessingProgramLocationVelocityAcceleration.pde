@@ -33,3 +33,9 @@ class  Ball {
     ellipse(location.x, location.y, 30, 30);
   }
 }
+
+void keyPressed() {
+  if (key == 's' || key == 'S') {
+    saveFrame("myMinimalProcessingProgramLocationVelocityAcceleration####.png");
+  }
+}
