@@ -1,11 +1,11 @@
-    //myClapAndJumpGame
+    //myClapAndJumpGameRevised
     import processing.sound.*;
 
     AudioIn input;
     Amplitude analyzer;
-    float silince = 0.01;
+    float silince = 0.05;
     boolean isFoul;
-    Ball ball;
+    Jumper jumper;
     Block block;
     
     void setup() {
@@ -14,7 +14,7 @@
 
         isFoul = false;
 
-        ball = new Ball();
+        jumper = new Jumper();
         block = new Block(400, height - 100);
 
         // 마이크 입력을 받을 객체를 만듭니다.
@@ -34,53 +34,61 @@
     void draw() {
         background(255);
 
-        if (ball.isColliding(block)){
+        if (jumper.isColliding(block)){
             isFoul = true; 
         }
 
         if (!isFoul) {
-            ball.setScore();
+            jumper.setScore();
             if (analyzer.analyze() > silince) {
-                ball.jump();
+                jumper.jump();
             }
-            ball.move();
+            jumper.move();
             block.move();
         }
         else {
             textAlign(CENTER, CENTER);
             text("Game Over", width / 2, 100);
+            rectMode(CENTER);
+            rect(width / 2, 205, 200, 50);
+            fill(255);
+            text("Reset", width / 2, 200);
+        }
+
+        if (mousePressed) {
+            if ((mouseX < width / 2 + 100) && (mouseX > width / 2 - 100) && (mouseY < 205 + 50)&& (mouseY > 205 - 50)){
+                reset();
+            }
         }
 
         block.display();
-        ball.display();
+        jumper.display();
         displayScore();
     }
     
-    class  Ball {
+    class  Jumper {
     
         PVector location;
         PVector velocity;
         PVector acceleration;
         PImage img;
-        int diameter;
-        int radius;
+        int scale;
         int score;
     
-        Ball() {
+        Jumper() {
             location = new PVector(width / 4, height / 2);
             velocity = new PVector(0, -2);
             acceleration = new PVector(0, 0.05);
             // 원본 이미지 위치
             // http://www.jumpwarehouse.com/activities/jump-kids/
             img = loadImage("jump.png");
-            diameter = 150;
-            radius = diameter / 2;
+            scale = 300;
             score = 0;
         }
     
         void jump() {
     
-            PVector force = new PVector(0, -3);
+            PVector force = new PVector(0, -1);
             velocity.add(force);
         }
     
@@ -90,40 +98,43 @@
             location.add(velocity);
     
             //왼쪽 벽에 닿이면
-            if (location.x < diameter / 2) {
-                location.x = diameter / 2;
+            if (location.x < 0) {
+                location.x = width;
                 velocity.x *= -1;
             }
             //오른쪽 벽에 닿이면
-            if (location.x > width - diameter / 2) {
-                location.x = width - diameter / 2;
+            if (location.x > width) {
+                location.x = width;
                 velocity.x *= -1;
             }
             //바닥에 닿이면
-            if (location.y > height - diameter) {
-                location.y = height - diameter;
+            if (location.y > height - scale / 2) {
+                location.y = height - scale / 2;
                 // velocity.y *= -0.9;
             }
             //천장에 닿이면
-            if (location.y < diameter / 2) {
+            if (location.y < 0) {
                 // location.y = diameter / 2;
                 // velocity.y *= -0.9;
             }
         }
     
         void display() {
-            //ellipse(location.x, location.y, diameter, diameter);
+            noFill();
+            rectMode(CENTER);
+            rect(location.x, location.y, scale / 2, scale);
             imageMode(CENTER);
-            image(img, location.x, location.y, diameter * 2, diameter * 2);
+            image(img, location.x, location.y, scale,  scale);
         }
 
         boolean isColliding(Block b) {
-            //borders
-            float left = b.x - radius;
-            float right = b.x + b.w + radius;
-            float top = b.y - radius;
-            float bottom = b.y  + b.h + radius;
-            if ((location.x > left) && (location.x < right) && (location.y > top) && (location.y < bottom)){
+            //borders of jumper
+            float left = location.x - scale / 2 / 2;
+            float right = location.x + scale / 2 / 2;
+            float top = location.y - scale / 2;
+            float bottom = location.y  + scale / 2;
+
+            if ((left > b.left) && (right < b.right) && (top > b.top) && (bottom < b.bottom)){
                 return true;
             }
             else {
@@ -147,25 +158,37 @@
         int w;
         int h;
 
+        int left;
+        int right;
+        int top;
+        int bottom;
+
         Block(int x_, int y_) {
             x = x_;
             y = y_;
             w = 50;
-            h = height - y_;
+            h = (height - y_) * 2;
+
+            left = x_ - w / 2;
+            right = x_ + w / 2;
+            top = y_ - h / 2;
+            bottom = y_ + h / 2;
         }
 
         //왼쪽으로 이동합니다
         void move() {
-            x--;
+            x -= 5;
+
             if (x < 0) {
                 x = width;
                 y = (int)random(0, height);
-                h = height - y;
+                h = height - this.y;
             }
         }
 
         void display() {
             fill(100);
+            rectMode(CENTER);
             rect(x, y, w, h);
         }
     }
@@ -173,11 +196,11 @@
     
     void keyPressed() {
         if (key == 's' || key == 'S') {
-            saveFrame("myClapAndJumpGame####.png");
+            saveFrame("myClapAndJumpGameRevised####.png");
         }
     
         if (key == 'j' || key == 'J') {
-            ball.jump();
+            jumper.jump();
         }
     }
 
@@ -186,5 +209,12 @@
         rectMode(CENTER);
         textAlign(CENTER, CENTER);
         fill(0, 102, 153);
-        text(ball.getScore(), width / 2, 50);
+        text(jumper.getScore(), width / 2, 50);
+    }
+
+    void reset() {
+        isFoul = false;
+
+        jumper = new Jumper();
+        block = new Block(width, (int)random(100, height-100));
     }
