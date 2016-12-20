@@ -11,22 +11,25 @@ int inverseMyBrightness;
 float frequency;
 float amplitude;
 float theta;
-;
+float camW2H;
+float halfWidth;
 
 void setup() {
-	size(1280, 480);
+	fullScreen();
 	
 	String[] cameras = Capture.list();
 	cam = new Capture(this, cameras[0]);
 	printArray(cameras);
 	cam.start();
 	frameRate(30);
+	halfWidth = width / 2;
 }
 
 void draw() {
 	background(255);
 	if (cam.available()) {
 		cam.read();
+		camW2H = (float)cam.width / (float)cam.height;
 		PImage original = cam.copy();
 		cam.filter(GRAY);
 		cam.filter(BLUR, 2);
@@ -34,7 +37,6 @@ void draw() {
 		noFill();
 		stroke(100, 20, 20);
 
-		strokeWeight(0.5);
 		for (int y = 0; y < cam.height; y += stepY) {
 			PShape line = createShape(PShape.PATH);
 			line.beginShape();
@@ -50,9 +52,12 @@ void draw() {
 			line.endShape();
 			target.addChild(line);
 		}
+		strokeWeight(1);
+		imageMode(CENTER);
+		image(original, width / 4, height / 2, halfWidth, halfWidth / camW2H);
+		target.scale(halfWidth / cam.width);
+		shape(target, halfWidth, height / 2 - halfWidth / camW2H / 2);
 
-		shape(target, width / 2, 0);
-		image(original, 0, 0);
 	}
 }
 

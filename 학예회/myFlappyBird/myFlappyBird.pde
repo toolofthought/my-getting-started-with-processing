@@ -38,6 +38,7 @@ void draw() {
   	if (frameCount % 75 == 0) {
     	pipes.add(new Pipe());
   	}
+  
 
   	if (keyPressed) {
     	PVector up = new PVector(0, -5);
