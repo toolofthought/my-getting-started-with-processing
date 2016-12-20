@@ -88,7 +88,7 @@
     
         void jump() {
     
-            PVector force = new PVector(0, -1);
+            PVector force = new PVector(0, -0.5);
             velocity.add(force);
         }
     
