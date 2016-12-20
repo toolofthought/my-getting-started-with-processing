@@ -8,6 +8,11 @@ PImage img;
 int patternScale = 100;
 int currentImg = 0;
 
+float screenX;
+float screenY;
+float screenW;
+float screenH;
+
 void setup() {
 	fullScreen();
 	smooth();
@@ -22,8 +27,45 @@ void draw() {
 	background(255);
 	fileName = files[currentImg].getName();
 	img = loadImage(fileName);
-	showImage(img);
-	showMosaic(img, patternScale);
+
+  float w2h = (float)img.width / (float)img.height;
+  if (img.width > img.height) {
+    screenX = 0;
+    screenY = height / 2 - width / w2h / 2;
+    screenW = width;
+    screenH = width / w2h;
+  }
+  else {
+    screenX = width / 2 - height * w2h / 2;
+    screenY = 0;
+    screenW = height * w2h;
+    screenH = height;
+  }
+  
+  if (patternScale <= 0) {
+    frameRate(0.2);
+    image(img, screenX, screenY, screenW, screenH);
+    patternScale = 100;
+    currentImg++;
+  }
+  else {
+    frameRate(1);
+    for (int y = (int)screenY; y < screenY + screenH; y += patternScale) {
+      for (int x = (int)screenX; x < screenX + screenW; x += patternScale) {
+        int imgX = (int)map(x, screenX, screenX + screenW, 0, img.width);
+        int imgY = (int)map(y, screenY, screenY + screenH, 0, img.height);
+        color c = img.get(imgX, imgY);
+        fill(c);
+        noStroke();
+        rect(x, y, patternScale, patternScale);
+      }
+    }
+  }
+  patternScale -= 5;
+	
+	if (currentImg == files.length) {
+		currentImg = 0;
+	}
 
 }
 
