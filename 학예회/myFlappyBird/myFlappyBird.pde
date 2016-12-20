@@ -1,19 +1,18 @@
 import processing.sound.*;
-AudioIn mic;
 Amplitude analyzer;
+AudioIn mic;
 
+float threshold = 0.10;
 Bird b;
 ArrayList<Pipe> pipes = new ArrayList<Pipe>();
-float thresholdTop = 0.05;
-float thresholdBottom = 0.02;
 
-int wid = 400;
+int wid;
 int rez = 20;
 int score = 0;
-boolean clapping = false;
 
 void setup() {
-  	size(800, 800);
+  	fullScreen();
+  	wid = width * 3 / 4;
   	b = new Bird();
   	//pixelDensity(2);
   	pipes.add(new Pipe());
@@ -35,7 +34,7 @@ void setup() {
 void draw() {
   	background(0);
 
-  	if (frameCount % 75 == 0) {
+  	if (frameCount % 150 == 0) {
     	pipes.add(new Pipe());
   	}
   
@@ -44,23 +43,16 @@ void draw() {
     	PVector up = new PVector(0, -5);
     	b.applyForce(up);
   	}
-
-  	float volume = map(analyzer.analyze(), 0, 1, height, 0);
-
-  	if (volume > thresholdTop && !clapping) {
-  		clapping = true;
-    	PVector up = new PVector(0, -5);
-    	b.applyForce(up);
-  	}
-
-  	if (volume < thresholdBottom) {
-  		clapping = false;
-  	}
+    
+    float volume = analyzer.analyze();
+    volume = constrain(volume, 0, 0.4);
+    if (volume > threshold) {
+      PVector up = new PVector(0, -5);
+      b.applyForce(up);
+    }
 
   	b.move();
   	b.display();
-
-
 
   	boolean safe = true;
 
@@ -93,20 +85,16 @@ void draw() {
   	text(score, width/2,50);
   
   	score = constrain(score, 0, score);
-
-  	//녹색 볼륨바
-  	fill(0, 255, 0);
-  	println(volume);
-  	rect(width - 50, volume, 50, volume);
-  	//빨간 thresholdTop
-  	stroke(255, 0, 0);
-  	float ytTop = map(thresholdTop, 0, 1, height, 0);
-  	line(width - 50, ytTop, width, ytTop);
-
-  	//빨간 thresholdBottom
-  	stroke(255, 0, 0);
-  	float ytBottom = map(thresholdBottom, 0, 1, height, 0);
-  	line(width - 50, ytBottom, width, ytBottom);
-    
+  
+  //volume bar
+  float vh = map(volume, 0, 0.4, height, 0);
+  fill(0, 255, 0);
+  noStroke();
+  rect(width - 50, vh, 50, vh);
+  
+  //thresholdTop line
+  float tt = map(threshold, 0, 0.4, height, 0);
+  stroke(255, 0, 0);
+  line(width - 50, tt, width, tt);
   
 }

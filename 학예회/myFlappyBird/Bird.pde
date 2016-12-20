@@ -8,7 +8,7 @@ class  Bird {
     float radius = 16;
 
     Bird() {
-        location = new PVector(100, height / 2);
+        location = new PVector(width / 4, height / 2);
         velocity = new PVector(0, 0);
         acceleration = new PVector(0, 0);
     }
